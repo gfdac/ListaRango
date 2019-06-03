@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Lista Rango</string>
+    <string name="BoasVindas">Bem-vindo ao Lista Rango</string>
+    <string name="buscar_estabelecimento">Buscar estabelecimento</string>
+    <string name="urlRestaurates">https://challange.goomer.com.br/restaurants</string>
+    <string name="urlMenu">https://challange.goomer.com.br/restaurants</string>
+
+    <string-array name="countries_array">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>American Samoa</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Anguilla</item>
+        <item>Antarctica</item>
+    </string-array>
+
+
+</resources>
