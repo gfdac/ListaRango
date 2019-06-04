@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/BoasVindas"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp" />
 
 

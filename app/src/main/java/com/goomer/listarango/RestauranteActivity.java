@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class RestauranteActivity extends AppCompatActivity {
@@ -21,7 +22,8 @@ public class RestauranteActivity extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, List<JSONObject>> listDataChild;
+    JSONObject menuTratado;
 
 
     @Override
@@ -45,14 +47,24 @@ public class RestauranteActivity extends AppCompatActivity {
             txtRestaurante.setText(restaurante.getString("name"));
             txtEndereco.setText(restaurante.getString("address"));
 
-            Restaurante r = new Restaurante(restaurante.getInt("id"), restaurante.getString("name"), restaurante.getString("address"), restaurante.getString("hours"), restaurante.getString("image"));
+
+            String horas = "";
+
+            try {
+                horas = restaurante.getString("hours");
+            }
+            catch (Throwable t) {
+                Log.e("DEBUGGER", "pane1");
+
+            }
+
+            Restaurante r = new Restaurante(restaurante.getInt("id"), restaurante.getString("name"), restaurante.getString("address"), horas, restaurante.getString("image"));
 
 
             JSONArray menu = new JSONArray(restaurante.getString("menu"));
 
-            JSONObject menuTratado = trataMenu(menu);
+            menuTratado = trataMenu(menu);
 
-            montaMenu(menuTratado);
 
             txtHorarios.setText(r.montaHorarios());
 
@@ -118,6 +130,9 @@ public class RestauranteActivity extends AppCompatActivity {
 
     //monta o menu do restaurante com base nos grupos
     private void montaMenu(JSONObject menuTratado) {
+
+
+        //para cada grupo de menu, monta uma accordion contendo os itens que lhe sao relativos.
 
 
     }
@@ -193,40 +208,35 @@ public class RestauranteActivity extends AppCompatActivity {
 
 
         listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataChild = new HashMap<String, List<JSONObject>>();
 
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
+        //montaMenu(menuTratado);
 
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
 
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
+        Iterator<String> iter = menuTratado.keys();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            listDataHeader.add(key);
+            try {
+                JSONArray itensgrupo = (JSONArray) menuTratado.get(key);
 
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
+                List<JSONObject> lista = new ArrayList<JSONObject>();
 
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+                for (int c = 0; c < itensgrupo.length(); c++) {
+
+                    JSONObject item = (JSONObject) itensgrupo.get(c);
+                    lista.add(item);
+
+                }
+
+                listDataChild.put(key, lista); // Header, Child data
+
+
+            } catch (JSONException e) {
+                // Something went wrong!
+            }
+        }
+
+
     }
 }

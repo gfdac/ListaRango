@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     AutoCompleteTextView txtRestaurantes;
     MyAdapter meuAdapter;
 
+    Handler handler = new Handler();
+    Runnable runnable;
+
+
     GridView gridView;
 
     @Override
@@ -100,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         final int interval = 60000; // 1 minuto
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
+
+        runnable = new Runnable() {
             public void run() {
 
 
@@ -186,9 +190,19 @@ public class MainActivity extends AppCompatActivity {
     //abre a tela do Restaurante, com menu e detalhes do estabelecimento
     private void abreRestaurante(JSONObject restaurante) {
 
+
+        paraTimer();
+
         Intent intent = new Intent(getBaseContext(), RestauranteActivity.class);
         intent.putExtra("RESTAURANTE", restaurante.toString());
         startActivity(intent);
+    }
+
+    private void paraTimer() {
+
+
+
+
     }
 
 
@@ -270,5 +284,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
 }

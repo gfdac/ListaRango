@@ -11,15 +11,18 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<JSONObject>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                 HashMap<String, List<JSONObject>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -40,7 +43,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        String nomeitem = "";
+        String descricao = "";
+        String preco = "";
+        String precopromocao = "";
+        try {
+            nomeitem = ((JSONObject) getChild(groupPosition, childPosition)).getString("name");
+//            descricao = ((JSONObject) getChild(groupPosition, childPosition)).getString("description");
+            preco = ((JSONObject) getChild(groupPosition, childPosition)).getString("price");
+            //precopromocao = ((JSONObject) getChild(groupPosition, childPosition)).getString("sales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        final String nomeitem = (String) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -49,9 +64,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+                .findViewById(R.id.txtNome);
+        TextView txtPreco = (TextView) convertView
+                .findViewById(R.id.txtPreco);
 
-        txtListChild.setText(childText);
+        TextView txtPrecoPromocao = (TextView) convertView
+                .findViewById(R.id.txtPrecoPromocao);
+
+        TextView txtDescricao = (TextView) convertView
+                .findViewById(R.id.txtDescricao);
+
+        txtListChild.setText(nomeitem);
+        txtPreco.setText(preco);
+        txtPrecoPromocao.setText(precopromocao);
+        txtDescricao.setText(descricao);
+
         return convertView;
     }
 
