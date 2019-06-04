@@ -1,12 +1,16 @@
 package com.goomer.listarango;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +44,8 @@ public class RestauranteActivity extends AppCompatActivity {
         TextView txtEndereco = (TextView) findViewById(R.id.txtEndereco);
         TextView txtHorarios = (TextView) findViewById(R.id.txtHorarios);
 
+        ImageView picture = (ImageView) findViewById(R.id.picture);
+
 
         try {
             restaurante = new JSONObject(getIntent().getStringExtra("RESTAURANTE"));
@@ -52,8 +58,7 @@ public class RestauranteActivity extends AppCompatActivity {
 
             try {
                 horas = restaurante.getString("hours");
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 Log.e("DEBUGGER", "pane1");
 
             }
@@ -67,6 +72,13 @@ public class RestauranteActivity extends AppCompatActivity {
 
 
             txtHorarios.setText(r.montaHorarios());
+
+
+            try {
+                Picasso.get().load(restaurante.getString("image")).into(picture);
+            } catch (IllegalArgumentException e) {
+            }
+
 
         } catch (Throwable t) {
             Log.e("DEBUGGER", "pane");

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.json.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.*;
 
 /**
@@ -22,6 +24,31 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.goomer.listarango", appContext.getPackageName());
+    }
+
+    @Test
+    public void deveObterDadosAPI() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        ObtemDadosAPI tester = new ObtemDadosAPI(appContext);
+
+        //se o retorno veio true, foi pq a funcao rodou certinho.. :)
+        assertTrue(tester.pegaDados());
+    }
+
+    @Test
+    public void deveObterRestaurantesMenus() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        ObtemDadosAPI tester = new ObtemDadosAPI(appContext);
+
+        //se o retorno veio true, foi pq a funcao rodou certinho.. :)
+        JSONArray lista = tester.pegaDadosRestaurantesMenu();
+
+        //teve retorno válido da api :D
+        assertThat("timestamp",
+                lista.length(),
+                greaterThan(0));
     }
 
 

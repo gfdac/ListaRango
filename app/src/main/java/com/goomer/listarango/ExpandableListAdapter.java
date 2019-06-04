@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,14 +46,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
+        ImageView picture;
+
         String nomeitem = "";
         String descricao = "";
         String preco = "";
         String precopromocao = "";
+        String image = "";
         try {
             nomeitem = ((JSONObject) getChild(groupPosition, childPosition)).getString("name");
 //            descricao = ((JSONObject) getChild(groupPosition, childPosition)).getString("description");
             preco = ((JSONObject) getChild(groupPosition, childPosition)).getString("price");
+            image = ((JSONObject) getChild(groupPosition, childPosition)).getString("image");
             //precopromocao = ((JSONObject) getChild(groupPosition, childPosition)).getString("sales");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -74,10 +81,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtDescricao = (TextView) convertView
                 .findViewById(R.id.txtDescricao);
 
+        picture = (ImageView) convertView.findViewById(R.id.picture);
+
         txtListChild.setText(nomeitem);
         txtPreco.setText(preco);
         txtPrecoPromocao.setText(precopromocao);
         txtDescricao.setText(descricao);
+
+
+        try {
+            Picasso.get().load(image).into(picture);
+        } catch (IllegalArgumentException e) {
+//            java.lang.IllegalArgumentException: Path must not be empty.
+//                    at com.squareup.picasso.Picasso.load(Picasso.java:332)
+//            at com.goomer.listarango.ExpandableListAdapter.getChildView(ExpandableListAdapter.java:91)
+        }
 
         return convertView;
     }

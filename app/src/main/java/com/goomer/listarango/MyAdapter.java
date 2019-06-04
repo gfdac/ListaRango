@@ -107,8 +107,14 @@ final class MyAdapter extends BaseAdapter {
         else
             aberto.setText("FECHADO");
 
-        Picasso.get().load(item.image).into(picture);
 
+        try {
+            Picasso.get().load(item.image).into(picture);
+        } catch (IllegalArgumentException e) {
+//            java.lang.IllegalArgumentException: Path must not be empty.
+//                    at com.squareup.picasso.Picasso.load(Picasso.java:332)
+//            at com.goomer.listarango.ExpandableListAdapter.getChildView(ExpandableListAdapter.java:91)
+        }
         return v;
     }
 

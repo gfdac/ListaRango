@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/picture"
         android:layout_width="96sp"
         android:layout_height="96sp"
         android:layout_margin="5sp"
