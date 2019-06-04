@@ -4,6 +4,7 @@
     <string name="buscar_estabelecimento">Buscar estabelecimento</string>
     <string name="urlRestaurates">https://challange.goomer.com.br/restaurants</string>
     <string name="urlMenu">https://challange.goomer.com.br/restaurants</string>
+    <string name="buscar_no_cardapio">Buscar no cardápio</string>
 
     <string-array name="countries_array">
         <item>Afghanistan</item>

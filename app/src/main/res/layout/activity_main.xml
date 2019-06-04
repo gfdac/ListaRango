@@ -9,12 +9,12 @@
 
 
     <TextView
-        android:id="@+id/txtBoasVindas"
+        android:id="@+id/txtRestaurante"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/BoasVindas"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 
 
     <LinearLayout

@@ -1,13 +1,20 @@
 package com.goomer.listarango;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,9 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -86,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void timerAtualiza() {
 
 
-        final int interval = 6000; // 1 minuto
+        final int interval = 60000; // 1 minuto
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -132,13 +143,50 @@ public class MainActivity extends AppCompatActivity {
 
         meuAdapter = new MyAdapter(this, listaRestaurantes);
 
+
         gridView = (GridView) findViewById(R.id.gridview);
         gridView.setAdapter(meuAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+
+                try {
+//                    Restaurante restaurante = (Restaurante) listaRestaurantes.get(position);
+                    JSONObject restaurante = (JSONObject) listaRestaurantes.get(position);
+
+
+//                    String item = "Selecionado Restaurante " + restaurante.name;
+                    String item = "Selecionado Restaurante " + restaurante.getString("name");
+
+                    Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+
+
+                    abreRestaurante(restaurante);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
 
 
         timerAtualiza();
 
 
+    }
+
+    //abre a tela do Restaurante, com menu e detalhes do estabelecimento
+    private void abreRestaurante(JSONObject restaurante) {
+
+        Intent intent = new Intent(getBaseContext(), RestauranteActivity.class);
+        intent.putExtra("RESTAURANTE", restaurante.toString());
+        startActivity(intent);
     }
 
 

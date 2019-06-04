@@ -130,4 +130,13 @@ public class Restaurante {
         this.image = image;
     }
 
+    public String montaHorarios() {
+        String retorno = "Segunda à Sexta: 11:30 às 15:00\n";
+        retorno += "Sábados: 11:30 às 22:00\n";
+        retorno += "Domingos e Feriados: 11:30 às 15:00\n";
+
+
+        return retorno;
+
+    }
 }
