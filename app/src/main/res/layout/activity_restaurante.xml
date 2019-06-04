@@ -15,8 +15,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="128sp"
-            android:layout_height="128sp"
+            android:layout_width="96sp"
+            android:layout_height="96sp"
+            android:layout_margin="10sp"
             app:srcCompat="@color/colorAberto" />
 
         <LinearLayout
@@ -29,21 +30,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/BoasVindas"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/txtEndereco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/BoasVindas"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/txtHorarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/BoasVindas"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

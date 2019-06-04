@@ -32,7 +32,9 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     OkHttpClient client = new OkHttpClient();
 
-    JSONArray listaRestaurantes, listaMenu;
+    JSONArray listaTempRestaurantes, listaRestaurantes, listaMenu;
     AutoCompleteTextView txtRestaurantes;
     MyAdapter meuAdapter;
 
@@ -195,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
         String urlRestaurantes = getString(R.string.urlRestaurates);
         String urlMenu = getString(R.string.urlMenu);
 
+        listaRestaurantes = new JSONArray();
+
         boolean retorno = true;
 
         try {
@@ -203,8 +207,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             try {
-                listaRestaurantes = new JSONArray(restaurantes);
-                Log.d("DEBUGGER", listaRestaurantes.toString());
+                listaTempRestaurantes = new JSONArray(restaurantes);
+                Log.d("DEBUGGER", listaTempRestaurantes.toString());
 
             } catch (Throwable t) {
                 Log.e("DEBUGGER", "Could not parse malformed JSON: \"" + restaurantes + "\"");
@@ -219,6 +223,30 @@ public class MainActivity extends AppCompatActivity {
             } catch (Throwable t) {
                 Log.e("DEBUGGER", "Could not parse malformed JSON: \"" + restaurantes + "\"");
                 retorno = false;
+            }
+
+
+            //para cada restaurante busca seu menu especifico e adiciona no modelo
+
+            for (int c = 0; c < listaTempRestaurantes.length(); c++) {
+
+                try {
+                    JSONObject restaurante = (JSONObject) listaTempRestaurantes.get(c);
+                    String urlMenuRestaurante = "https://challange.goomer.com.br/restaurants/" + restaurante.getString("id") + "/menu";
+                    String menurestaurante = run(urlMenuRestaurante);
+
+
+
+
+
+                    listaRestaurantes.put(restaurante.put("menu", menurestaurante));
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
 

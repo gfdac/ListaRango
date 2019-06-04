@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/BoasVindas"
-        android:textSize="26sp" />
+        android:textSize="24sp" />
 
 
     <LinearLayout

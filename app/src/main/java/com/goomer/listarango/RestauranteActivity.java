@@ -8,6 +8,8 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -44,6 +46,13 @@ public class RestauranteActivity extends AppCompatActivity {
             txtEndereco.setText(restaurante.getString("address"));
 
             Restaurante r = new Restaurante(restaurante.getInt("id"), restaurante.getString("name"), restaurante.getString("address"), restaurante.getString("hours"), restaurante.getString("image"));
+
+
+            JSONArray menu = new JSONArray(restaurante.getString("menu"));
+
+            JSONObject menuTratado = trataMenu(menu);
+
+            montaMenu(menuTratado);
 
             txtHorarios.setText(r.montaHorarios());
 
@@ -107,11 +116,82 @@ public class RestauranteActivity extends AppCompatActivity {
 
     }
 
+    //monta o menu do restaurante com base nos grupos
+    private void montaMenu(JSONObject menuTratado) {
+
+
+    }
+
+    private JSONObject trataMenu(JSONArray menu) {
+
+        JSONObject retorno = new JSONObject();
+        JSONArray templista = new JSONArray();
+
+        //retorna um array com os produtos dentro de suas categorias
+        for (int c = 0; c < menu.length(); c++) {
+
+
+            try {
+
+                //obtem o menu
+                JSONObject itemmenu = menu.getJSONObject(c);
+
+                //obtem o grupo do item do menu
+                String grupo = itemmenu.getString("group");
+
+                //obtem o array deste grupo com os items de menu ja adicionados
+                try {
+
+
+                    try {
+                        //achou o grupo
+                        templista = retorno.getJSONArray(grupo);
+
+                        //adiciona o novo item de menu no seu grupo
+                        templista.put(itemmenu);
+                        retorno.put(grupo, templista);
+
+
+                    } catch (JSONException e) {
+                        //nao acho uo grupo
+                        e.printStackTrace();
+
+                        //adiciona o novo item de menu no seu grupo
+
+                        JSONArray lista = new JSONArray();
+
+
+                        lista.put(itemmenu);
+                        retorno.put(grupo, lista);
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+
+        return retorno;
+
+    }
+
 
     /*
      * Preparing the list data
      */
     private void prepareListData() {
+
+
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
