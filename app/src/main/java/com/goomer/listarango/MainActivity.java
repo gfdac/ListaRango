@@ -208,63 +208,17 @@ public class MainActivity extends AppCompatActivity {
 
     boolean pegaDados() {
 
-        String urlRestaurantes = getString(R.string.urlRestaurates);
-        String urlMenu = getString(R.string.urlMenu);
-
-        listaRestaurantes = new JSONArray();
 
         boolean retorno = true;
 
         try {
-            String restaurantes = run(urlRestaurantes);
-            String menu = run(urlMenu);
 
+            ObtemDadosAPI tester = new ObtemDadosAPI(MainActivity.this);
 
-            try {
-                listaTempRestaurantes = new JSONArray(restaurantes);
-                Log.d("DEBUGGER", listaTempRestaurantes.toString());
+            //se o retorno veio true, foi pq a funcao rodou certinho.. :)
+            listaRestaurantes = tester.pegaDadosRestaurantesMenu();
 
-            } catch (Throwable t) {
-                Log.e("DEBUGGER", "Could not parse malformed JSON: \"" + restaurantes + "\"");
-                retorno = false;
-            }
-
-
-            try {
-                listaMenu = new JSONArray(menu);
-                Log.d("DEBUGGER", listaMenu.toString());
-
-            } catch (Throwable t) {
-                Log.e("DEBUGGER", "Could not parse malformed JSON: \"" + restaurantes + "\"");
-                retorno = false;
-            }
-
-
-            //para cada restaurante busca seu menu especifico e adiciona no modelo
-
-            for (int c = 0; c < listaTempRestaurantes.length(); c++) {
-
-                try {
-                    JSONObject restaurante = (JSONObject) listaTempRestaurantes.get(c);
-                    String urlMenuRestaurante = "https://challange.goomer.com.br/restaurants/" + restaurante.getString("id") + "/menu";
-                    String menurestaurante = run(urlMenuRestaurante);
-
-
-
-
-
-                    listaRestaurantes.put(restaurante.put("menu", menurestaurante));
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-
-        } catch (IOException e) {
+         } catch (Exception e) {
             e.printStackTrace();
             retorno = false;
         }
@@ -273,16 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    String run(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        }
-    }
 
     @Override
     protected void onStop() {
